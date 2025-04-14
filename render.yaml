@@ -2,17 +2,18 @@ services:
   - type: web
     name: connectlion-backend
     env: python
-    buildCommand: cd backend && pip install -r requirements.txt
-    startCommand: cd backend && PYTHONPATH=$PYTHONPATH:. uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
         sync: false
       - key: SECRET_KEY
-        value: django-insecure-8x#v9#7q$vx#v9#7q$vx#v9#7q$vx#v9#7q$vx
+        generateValue: true
       - key: ALGORITHM
         value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
-        value: 30
+        value: "30"
+    autoDeploy: true
 
 databases:
   - name: connectlion-db
