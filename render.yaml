@@ -2,15 +2,13 @@ services:
   - type: web
     name: connectlion-backend
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: connectlion-db
-          property: connectionString
+        sync: false
       - key: SECRET_KEY
-        generateValue: true
+        value: django-insecure-8x#v9#7q$vx#v9#7q$vx#v9#7q$vx#v9#7q$vx
       - key: ALGORITHM
         value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
@@ -20,4 +18,5 @@ databases:
   - name: connectlion-db
     databaseName: connectlion
     user: connectlion
-    plan: free 
+    plan: free
+    ipAllowList: [] # 모든 IP에서 접근 가능하도록 설정 
