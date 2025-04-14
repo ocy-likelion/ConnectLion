@@ -15,6 +15,19 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
+    """
+    로그인 API
+    
+    - **username**: 이메일 주소
+    - **password**: 비밀번호
+    
+    Returns:
+        - **access_token**: JWT 토큰
+        - **token_type**: 토큰 타입 (bearer)
+    
+    Raises:
+        - **401**: 잘못된 이메일 또는 비밀번호
+    """
     user = db.query(User).filter(User.email == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
@@ -36,6 +49,19 @@ async def register(
     role: str,
     db: Session = Depends(get_db)
 ):
+    """
+    회원가입 API
+    
+    - **email**: 이메일 주소
+    - **password**: 비밀번호
+    - **role**: 사용자 역할 (GRADUATE/COMPANY/ADMIN)
+    
+    Returns:
+        - **message**: 성공 메시지
+    
+    Raises:
+        - **400**: 이미 등록된 이메일
+    """
     # Check if user already exists
     if db.query(User).filter(User.email == email).first():
         raise HTTPException(
